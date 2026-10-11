@@ -1,8 +1,0 @@
-[2026-10-11T09:38:35.571Z] [plugin] Server not started (port 5173 in use — another instance is the leader)
-[2026-10-11T09:38:35.572Z] [plugin] Connected to server on attempt 1
-[2026-10-11T09:41:37.022Z] [plugin] Server not started (port 5173 in use — another instance is the leader)
-[2026-10-11T09:41:37.027Z] [plugin] Connected to server on attempt 1
-[2026-10-11T09:45:59.178Z] [plugin] Server not started (port 5173 in use — another instance is the leader)
-[2026-10-11T09:45:59.183Z] [plugin] Connected to server on attempt 1
-[2026-10-11T13:15:56.006Z] [plugin] Server not started (port 5173 in use — another instance is the leader)
-[2026-10-11T13:15:56.007Z] [plugin] Connected to server on attempt 1
