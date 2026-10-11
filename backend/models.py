@@ -173,6 +173,7 @@ class SystemStatus(BaseModel):
     hf_available: bool = False
     hf_model: Optional[str] = None
     hf_latency_ms: Optional[float] = None
+    hf_device: Optional[str] = None
     ollama_reachable: bool = False
     ollama_model: Optional[str] = None
     ollama_latency_ms: Optional[float] = None

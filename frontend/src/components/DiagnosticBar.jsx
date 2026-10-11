@@ -47,6 +47,11 @@ export default function DiagnosticBar({ status, error, onRefresh, playerId }) {
         <span className="inline-flex items-center gap-1.5">
           <Cpu className="h-3.5 w-3.5" aria-hidden="true" />
           {activeModel}
+          {status?.hf_device ? (
+            <span className="rounded bg-surface-2 px-1.5 py-0.5 text-[10px] font-semibold text-ink-2">
+              {status.hf_device.toUpperCase()}
+            </span>
+          ) : null}
         </span>
 
         <span className="inline-flex items-center gap-1.5">

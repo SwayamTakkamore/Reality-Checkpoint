@@ -115,6 +115,7 @@ async def status() -> SystemStatus:
         hf_available=hf_ok,
         hf_model=health.get("hf_model"),
         hf_latency_ms=health.get("hf_latency_ms"),
+        hf_device=health.get("hf_device"),
         ollama_reachable=ollama_ok,
         ollama_model=health.get("ollama_model"),
         ollama_latency_ms=health.get("ollama_latency_ms"),

@@ -92,7 +92,13 @@ export default function PortalHome({ player, status, error, busy, onBegin, onRes
           <Stat
             icon={Sparkles}
             label="Mode"
-            value={status?.hf_available || status?.ollama_reachable ? 'Live Local' : 'Fallback'}
+            value={
+              status?.hf_available
+                ? `Live ${status?.hf_device ? status.hf_device.toUpperCase() : 'Local'}`
+                : status?.ollama_reachable
+                  ? 'Live Local'
+                  : 'Fallback'
+            }
             hint={status?.hf_model || status?.ollama_model || 'deterministic heuristics'}
           />
         </div>

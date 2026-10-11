@@ -118,6 +118,7 @@ class AIEngine:
         self._hf_model = None
         self._hf_tokenizer = None
         self._hf_initialized = False
+        self._device_used: Optional[str] = None
         self.base_url = base_url.rstrip("/")
         self.model = model
         self.timeout = timeout
@@ -179,6 +180,7 @@ class AIEngine:
             "hf_available": hf_ok,
             "hf_model": self.hf_model_id if hf_ok else None,
             "hf_latency_ms": hf_latency,
+            "hf_device": self._device_used if hf_ok else None,
             "ollama_reachable": ollama_ok,
             "ollama_model": self.model if ollama_ok else None,
             "ollama_latency_ms": ollama_latency,
@@ -193,32 +195,93 @@ class AIEngine:
         if self._hf_model is not None and self._hf_tokenizer is not None:
             return True
         try:
+            import torch
             from transformers import AutoModelForCausalLM, AutoTokenizer
-            self._hf_tokenizer = AutoTokenizer.from_pretrained(self.hf_model_id)
-            self._hf_model = AutoModelForCausalLM.from_pretrained(self.hf_model_id, torch_dtype="auto", low_cpu_mem_usage=True)
+
+            if self._hf_tokenizer is None:
+                self._hf_tokenizer = AutoTokenizer.from_pretrained(self.hf_model_id)
+
+            # 1. Attempt GPU first if CUDA is available
+            if torch.cuda.is_available():
+                try:
+                    dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+                    self._hf_model = AutoModelForCausalLM.from_pretrained(
+                        self.hf_model_id,
+                        device_map="auto",
+                        torch_dtype=dtype,
+                        low_cpu_mem_usage=True,
+                    )
+                    self._device_used = "cuda"
+                    self._hf_initialized = True
+                    return True
+                except Exception:
+                    if torch.cuda.is_available():
+                        torch.cuda.empty_cache()
+                    self._hf_model = None
+
+            # 2. Fallback to CPU
+            self._hf_model = AutoModelForCausalLM.from_pretrained(
+                self.hf_model_id,
+                torch_dtype="auto",
+                low_cpu_mem_usage=True,
+            )
+            self._device_used = "cpu"
             self._hf_initialized = True
             return True
         except Exception:
             self._hf_initialized = False
             self._hf_model = None
+            self._device_used = None
             return False
 
     def _generate_hf_json(self, system: str, user: str, max_tokens: int = 300) -> Optional[Dict[str, Any]]:
         if not self._ensure_hf() or self._hf_model is None or self._hf_tokenizer is None:
             return None
         try:
+            import torch
             messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
             text = self._hf_tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
             inputs = self._hf_tokenizer(text, return_tensors="pt")
-            outputs = self._hf_model.generate(
-                **inputs,
-                max_new_tokens=max_tokens,
-                temperature=0.6,
-                top_p=0.9,
-                do_sample=True,
-                pad_token_id=self._hf_tokenizer.eos_token_id,
-            )
-            gen = outputs[0][inputs.input_ids.shape[1]:]
+
+            target_device = getattr(self._hf_model, "device", None)
+            if target_device is not None:
+                inputs = {k: v.to(target_device) for k, v in inputs.items()}
+
+            try:
+                outputs = self._hf_model.generate(
+                    **inputs,
+                    max_new_tokens=max_tokens,
+                    temperature=0.6,
+                    top_p=0.9,
+                    do_sample=True,
+                    pad_token_id=self._hf_tokenizer.eos_token_id,
+                )
+            except Exception:
+                if self._device_used == "cuda":
+                    # Runtime error or CUDA OOM during generation: fallback to CPU
+                    if torch.cuda.is_available():
+                        torch.cuda.empty_cache()
+                    from transformers import AutoModelForCausalLM
+                    self._hf_model = AutoModelForCausalLM.from_pretrained(
+                        self.hf_model_id,
+                        torch_dtype="auto",
+                        low_cpu_mem_usage=True,
+                    )
+                    self._device_used = "cpu"
+                    inputs = {k: v.to("cpu") for k, v in inputs.items()}
+                    outputs = self._hf_model.generate(
+                        **inputs,
+                        max_new_tokens=max_tokens,
+                        temperature=0.6,
+                        top_p=0.9,
+                        do_sample=True,
+                        pad_token_id=self._hf_tokenizer.eos_token_id,
+                    )
+                else:
+                    raise
+
+            input_len = inputs["input_ids"].shape[1]
+            gen = outputs[0][input_len:]
             resp_str = self._hf_tokenizer.decode(gen, skip_special_tokens=True)
             return extract_json(resp_str)
         except Exception:
