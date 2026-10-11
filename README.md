@@ -50,9 +50,15 @@ Progress is stored per player and per storyline; completing a chapter unlocks th
 
 ## Quick start
 
-One command builds the interface if needed and serves everything:
+- **Live Deployed Demo**: [reality-checkpoint-mauve.vercel.app](https://reality-checkpoint-mauve.vercel.app)
+- **Local Run with Google Gemma 4 (GPU / CPU)**:
 
 ```bash
+# 1. Clone the repository
+git clone https://github.com/SwayamTakkamore/Reality-Checkpoint.git
+cd Reality-Checkpoint
+
+# 2. Run the one-command launcher
 ./start.sh
 ```
 

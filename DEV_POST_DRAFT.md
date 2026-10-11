@@ -37,16 +37,36 @@ When you return, you describe what you noticed. A local open-weight AI model eva
 
 ## Demo
 
-- **Live Repository & Quickstart**: [github.com/SwayamTakkamore/Reality-Checkpoint](https://github.com/SwayamTakkamore/Reality-Checkpoint)
-- **Local Walkthrough**:
-  1. **Launch**: Run `./start.sh` and open `http://localhost:8000` on any desktop or mobile browser.
-  2. **Minimal Nature Aesthetic**: Enjoy a warm parchment light mode (`#fbfaf7`), botanical pine/sage accents, and editorial *Newsreader* serif typography (with an instant dark mode toggle).
-  3. **Select Parameters**: Choose a 10-minute budget with the theme *"The Architecture of Shadows"*.
-  4. **Receive Quest**: The local Gemma 4 model generates *"The Long Shadow"*, directing you to observe how sunlight and cast iron meet at a physical railing.
-  5. **Dormant Mode**: The screen dims into a minimalist breathing timer. The device goes into your pocket.
-  6. **Return & Socratic Reflection**: You return and input:
-     > *"I observed a jagged cast shadow from an iron balcony railing. The sunlight shifted by roughly two inches over ten minutes, softening along the penumbra as high clouds passed."*
-  7. **Evaluation & Memory Extraction**: Gemma 4 awards 46 XP, validates your observational depth, and files an episodic memory node (`Category: Light, Tags: [visual, kinetic]`) into your persistent Field Journal.
+- **Live Deployed App (Vercel)**: [reality-checkpoint-mauve.vercel.app](https://reality-checkpoint-mauve.vercel.app)
+- **GitHub Repository**: [github.com/SwayamTakkamore/Reality-Checkpoint](https://github.com/SwayamTakkamore/Reality-Checkpoint)
+
+### Running Locally with Google Gemma 4 (Step-by-Step)
+
+Because true open-innovation outdoor gaming prioritizes personal privacy, zero cloud dependence, and zero metered API fees, the recommended way to experience the full AI engine with **Google Gemma 4 (`google/gemma-4-E2B-it`)** is running it locally on your computer:
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/SwayamTakkamore/Reality-Checkpoint.git
+cd Reality-Checkpoint
+
+# 2. Run the one-command launcher
+./start.sh
+```
+
+**What the launcher handles automatically:**
+1. Verifies your Python 3.11+ environment and backend requirements (`fastapi`, `transformers`, `torch`, `accelerate`).
+2. Loads **Google Gemma 4 (`google/gemma-4-E2B-it`)** natively through Hugging Face Transformers.
+3. **Hardware Adaptation**: Automatically checks for GPU acceleration (NVIDIA CUDA with `float16`/`bfloat16`) for rapid inference, and transparently falls back to CPU if a dedicated GPU is absent.
+4. Serves the prebuilt nature-friendly UI unified with the API at **`http://localhost:8000`**.
+
+### Local Gameplay Walkthrough:
+1. **Open the Portal**: Navigate to `http://localhost:8000`. The minimal nature aesthetic greets you in warm parchment (`#fbfaf7`), botanical pine and sage accents, and editorial *Newsreader* serif typography (with an instant dark mode toggle).
+2. **Select Parameters**: Choose a 10-minute budget with the theme *"The Architecture of Shadows"*.
+3. **Receive Quest**: Gemma 4 generates *"The Long Shadow"*, directing you to observe how sunlight and cast iron meet at a physical railing.
+4. **Dormant Mode**: The screen dims into a minimalist breathing timer with ambient Web Audio chime indicators. Put the phone in your pocket and step outside.
+5. **Return & Socratic Reflection**: You return and input your observation:
+   > *"I observed a jagged cast shadow from an iron balcony railing. The sunlight shifted by roughly two inches over ten minutes, softening along the penumbra as high clouds passed."*
+6. **Evaluation & Reality Memory™**: Gemma 4 evaluates observational depth on-device, awards XP, and records an episodic memory node (`Category: Light, Tags: [visual, kinetic]`) into your persistent local Field Journal.
 
 ---
 
