@@ -61,7 +61,7 @@ The entire codebase is open source under the MIT License:
 flowchart TD
     Client["📱 Responsive PWA / Mobile Web<br/>(React 18 + Tailwind + Web Audio)"]
     API["⚡ FastAPI Backend Engine<br/>(Python 3.11+)"]
-    LLM["🧠 Local Open-Weight LLM<br/>(Hugging Face Transformers: Qwen2.5 / SmolLM)"]
+    LLM["🧠 Local Open-Weight LLM<br/>(Hugging Face Transformers: Gemma 4 (google/gemma-4-E2B-it))"]
     DB[("💾 Local SQLite3 Database<br/>(WAL Mode: reality_checkpoint.db)")]
     Memory["🌿 Reality Memory™ Engine<br/>(Episodic Knowledge Graph)"]
 

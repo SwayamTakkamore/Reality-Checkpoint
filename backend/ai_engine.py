@@ -44,7 +44,7 @@ OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "glm-4.7-flash")
 OLLAMA_TIMEOUT = float(os.environ.get("OLLAMA_TIMEOUT", "45"))
 
-HF_MODEL_ID = os.environ.get("HF_MODEL_ID", "Qwen/Qwen2.5-0.5B-Instruct")
+HF_MODEL_ID = os.environ.get("HF_MODEL_ID", "google/gemma-4-E2B-it")
 DISABLE_HF = os.environ.get("REALITY_DISABLE_HF", "0") == "1"
 
 

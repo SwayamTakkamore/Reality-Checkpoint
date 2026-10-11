@@ -81,7 +81,7 @@ cd frontend && npm install && npm run dev
 
 ### With local Hugging Face Transformers
 
-Reality Checkpoint runs open-weight models directly on your device via **Hugging Face Transformers** (default: `Qwen/Qwen2.5-0.5B-Instruct`). No external daemon is required:
+Reality Checkpoint runs open-weight models directly on your device via **Hugging Face Transformers** (default: `google/gemma-4-E2B-it`). No external daemon is required:
 
 ```bash
 pip install -r requirements.txt
@@ -92,7 +92,7 @@ The app loads the model locally into memory, and the diagnostic bar reports `Hug
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
-| `HF_MODEL_ID` | `Qwen/Qwen2.5-0.5B-Instruct` | Hugging Face model repository ID |
+| `HF_MODEL_ID` | `google/gemma-4-E2B-it` | Hugging Face model repository ID |
 | `REALITY_DISABLE_HF` | `0` | Set to `1` to disable Transformers |
 | `REALITY_ENABLE_OLLAMA`| `0` | Set to `1` to use Ollama as secondary runtime |
 | `REALITY_DB_PATH` | `backend/reality_checkpoint.db` | SQLite location |
