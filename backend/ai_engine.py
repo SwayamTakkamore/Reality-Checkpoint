@@ -190,16 +190,16 @@ class AIEngine:
     def _ensure_hf(self) -> bool:
         if not self.hf_enabled:
             return False
-        if self._hf_initialized:
-            return self._hf_model is not None
+        if self._hf_model is not None and self._hf_tokenizer is not None:
+            return True
         try:
             from transformers import AutoModelForCausalLM, AutoTokenizer
             self._hf_tokenizer = AutoTokenizer.from_pretrained(self.hf_model_id)
-            self._hf_model = AutoModelForCausalLM.from_pretrained(self.hf_model_id)
+            self._hf_model = AutoModelForCausalLM.from_pretrained(self.hf_model_id, torch_dtype="auto", low_cpu_mem_usage=True)
             self._hf_initialized = True
             return True
         except Exception:
-            self._hf_initialized = True
+            self._hf_initialized = False
             self._hf_model = None
             return False
 
