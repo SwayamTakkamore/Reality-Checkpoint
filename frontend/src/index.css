@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-obsidian-950 text-paper-100 font-sans antialiased;
+    background-image:
+      radial-gradient(900px 520px at 12% -8%, rgba(47, 107, 79, 0.28), transparent 62%),
+      radial-gradient(760px 460px at 92% 4%, rgba(63, 143, 104, 0.14), transparent 60%),
+      radial-gradient(1100px 700px at 50% 118%, rgba(20, 40, 32, 0.5), transparent 70%);
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    @apply bg-forest-500/35 text-paper-50;
+  }
+
+  *:focus-visible {
+    @apply outline-none ring-2 ring-forest-400/70 ring-offset-2 ring-offset-obsidian-950;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-obsidian-900;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-obsidian-600;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-forest-700;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-2xl border border-white/[0.07] bg-obsidian-900/70 backdrop-blur-sm shadow-inner_soft;
+  }
+
+  .panel-quiet {
+    @apply rounded-xl border border-white/[0.05] bg-white/[0.02];
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium
+           transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .btn-primary {
+    @apply btn bg-forest-600 text-paper-50 hover:bg-forest-500 active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply btn border border-white/[0.08] bg-white/[0.02] text-paper-200 hover:border-forest-500/40
+           hover:bg-forest-500/10 hover:text-paper-50;
+  }
+
+  .label {
+    @apply text-[11px] font-medium uppercase tracking-[0.16em] text-paper-400;
+  }
+
+  .field {
+    @apply w-full rounded-xl border border-white/[0.08] bg-obsidian-850/80 px-3.5 py-2.5 text-sm
+           text-paper-100 placeholder:text-paper-500/60 focus:border-forest-500/60 focus:bg-obsidian-850;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03]
+           px-3 py-1 text-xs text-paper-300;
+  }
+
+  .chip-active {
+    @apply border-forest-500/60 bg-forest-500/15 text-paper-50;
+  }
+
+  .stat-value {
+    @apply font-serif text-2xl leading-none text-paper-50;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
