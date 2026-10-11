@@ -2,7 +2,7 @@
 title: Reality Checkpoint — The AI Game That Asks You to Put Your Phone Away
 published: true
 tags: devchallenge, hf26challenge, ai, opensource
-cover_image: https://raw.githubusercontent.com/devrelay/reality-checkpoint/main/assets/cover.png
+cover_image: https://raw.githubusercontent.com/SwayamTakkamore/Reality-Checkpoint/main/assets/cover.png
 description: An AI-powered real-world adventure game running on Google Gemma 4 locally that turns ordinary surroundings into quests. Screen is dormant; reality is the game.
 ---
 
@@ -37,7 +37,7 @@ When you return, you describe what you noticed. A local open-weight AI model eva
 
 ## Demo
 
-- **Live Repository & Quickstart**: [github.com/devrelay/reality-checkpoint](https://github.com/devrelay/reality-checkpoint) *(Replace with your GitHub repo URL)*
+- **Live Repository & Quickstart**: [github.com/SwayamTakkamore/Reality-Checkpoint](https://github.com/SwayamTakkamore/Reality-Checkpoint)
 - **Local Walkthrough**:
   1. **Launch**: Run `./start.sh` and open `http://localhost:8000` on any desktop or mobile browser.
   2. **Minimal Nature Aesthetic**: Enjoy a warm parchment light mode (`#fbfaf7`), botanical pine/sage accents, and editorial *Newsreader* serif typography (with an instant dark mode toggle).
@@ -54,9 +54,8 @@ When you return, you describe what you noticed. A local open-weight AI model eva
 
 The entire codebase is open source under the MIT License:
 
-{% github devrelay/reality-checkpoint %}
+{% github SwayamTakkamore/Reality-Checkpoint %}
 
-*(Note: If your repository is hosted under a different handle, replace `devrelay/reality-checkpoint` with your repository path)*
 
 ### Project Architecture
 
