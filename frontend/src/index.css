@@ -4,7 +4,79 @@
 
 @layer base {
   :root {
+    color-scheme: light;
+
+    --canvas: 251 250 247;
+    --canvas-2: 246 244 238;
+    --surface: 255 255 255;
+    --surface-2: 242 240 233;
+    --surface-3: 236 233 224;
+    --line: 232 230 223;
+    --line-strong: 220 217 207;
+
+    --ink: 28 40 35;
+    --ink-2: 92 112 102;
+    --ink-3: 135 155 145;
+
+    --pine: 45 90 67;
+    --pine-ink: 252 251 248;
+    --sage: 64 123 93;
+    --moss: 92 138 110;
+    --moss-deep: 32 66 50;
+
+    --amber: 217 119 6;
+    --amber-ink: 154 91 6;
+
+    --track: 232 229 220;
+    --scroll: 214 210 199;
+    --ring: 64 123 93;
+
+    --shadow-natural: 0 1px 3px rgba(0, 0, 0, 0.03), 0 10px 25px -5px rgba(44, 72, 56, 0.05);
+    --shadow-lift: 0 2px 6px rgba(28, 40, 35, 0.04), 0 18px 40px -12px rgba(44, 72, 56, 0.12);
+    --shadow-glow: 0 1px 2px rgba(0, 0, 0, 0.02), 0 22px 50px -20px rgba(64, 123, 93, 0.28);
+
+    --bg-wash:
+      radial-gradient(900px 520px at 12% -8%, rgb(92 138 110 / 0.10), transparent 62%),
+      radial-gradient(760px 460px at 92% 4%, rgb(64 123 93 / 0.07), transparent 60%),
+      radial-gradient(1100px 700px at 50% 118%, rgb(217 119 6 / 0.05), transparent 70%);
+  }
+
+  .dark {
     color-scheme: dark;
+
+    --canvas: 11 17 14;
+    --canvas-2: 8 13 11;
+    --surface: 18 26 22;
+    --surface-2: 23 32 27;
+    --surface-3: 28 38 32;
+    --line: 31 45 39;
+    --line-strong: 40 58 50;
+
+    --ink: 244 243 237;
+    --ink-2: 168 182 173;
+    --ink-3: 124 141 131;
+
+    --pine: 77 169 124;
+    --pine-ink: 6 14 10;
+    --sage: 109 196 152;
+    --moss: 63 143 104;
+    --moss-deep: 18 41 31;
+
+    --amber: 251 191 36;
+    --amber-ink: 252 211 77;
+
+    --track: 28 38 32;
+    --scroll: 42 53 49;
+    --ring: 77 169 124;
+
+    --shadow-natural: 0 1px 2px rgba(0, 0, 0, 0.4), 0 14px 30px -12px rgba(0, 0, 0, 0.55);
+    --shadow-lift: 0 2px 6px rgba(0, 0, 0, 0.45), 0 22px 46px -14px rgba(0, 0, 0, 0.6);
+    --shadow-glow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 26px 60px -22px rgba(77, 169, 124, 0.35);
+
+    --bg-wash:
+      radial-gradient(900px 520px at 12% -8%, rgb(47 107 79 / 0.28), transparent 62%),
+      radial-gradient(760px 460px at 92% 4%, rgb(63 143 104 / 0.16), transparent 60%),
+      radial-gradient(1100px 700px at 50% 118%, rgb(20 40 32 / 0.5), transparent 70%);
   }
 
   html,
@@ -13,81 +85,97 @@
     height: 100%;
   }
 
+  html {
+    background-color: rgb(var(--canvas));
+  }
+
   body {
-    @apply bg-obsidian-950 text-paper-100 font-sans antialiased;
-    background-image:
-      radial-gradient(900px 520px at 12% -8%, rgba(47, 107, 79, 0.28), transparent 62%),
-      radial-gradient(760px 460px at 92% 4%, rgba(63, 143, 104, 0.14), transparent 60%),
-      radial-gradient(1100px 700px at 50% 118%, rgba(20, 40, 32, 0.5), transparent 70%);
+    @apply bg-canvas font-sans text-ink antialiased;
+    background-image: var(--bg-wash);
     background-attachment: fixed;
+    transition: background-color 240ms ease, color 240ms ease;
   }
 
   ::selection {
-    @apply bg-forest-500/35 text-paper-50;
+    background-color: rgb(var(--moss) / 0.28);
+    color: rgb(var(--ink));
   }
 
   *:focus-visible {
-    @apply outline-none ring-2 ring-forest-400/70 ring-offset-2 ring-offset-obsidian-950;
+    outline: 2px solid rgb(var(--ring) / 0.65);
+    outline-offset: 2px;
+    border-radius: 6px;
   }
 
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
+
   ::-webkit-scrollbar-track {
-    @apply bg-obsidian-900;
+    background-color: rgb(var(--surface-2));
   }
+
   ::-webkit-scrollbar-thumb {
-    @apply rounded-full bg-obsidian-600;
+    border-radius: 9999px;
+    background-color: rgb(var(--scroll));
   }
+
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-forest-700;
+    background-color: rgb(var(--moss));
   }
 }
 
 @layer components {
   .panel {
-    @apply rounded-2xl border border-white/[0.07] bg-obsidian-900/70 backdrop-blur-sm shadow-inner_soft;
+    @apply rounded-2xl border border-line bg-surface shadow-natural;
+    transition: background-color 240ms ease, border-color 240ms ease;
   }
 
   .panel-quiet {
-    @apply rounded-xl border border-white/[0.05] bg-white/[0.02];
+    @apply rounded-xl border border-line bg-surface-2;
+    transition: background-color 240ms ease, border-color 240ms ease;
   }
 
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium
-           transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-40;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-45;
   }
 
   .btn-primary {
-    @apply btn bg-forest-600 text-paper-50 hover:bg-forest-500 active:scale-[0.98];
+    @apply btn bg-pine hover:bg-sage active:scale-[0.98];
+    color: rgb(var(--pine-ink));
+    box-shadow: var(--shadow-natural);
   }
 
   .btn-ghost {
-    @apply btn border border-white/[0.08] bg-white/[0.02] text-paper-200 hover:border-forest-500/40
-           hover:bg-forest-500/10 hover:text-paper-50;
+    @apply btn border border-line bg-surface text-ink-2 hover:border-sage/50 hover:bg-moss/10 hover:text-ink;
   }
 
   .label {
-    @apply text-[11px] font-medium uppercase tracking-[0.16em] text-paper-400;
+    @apply text-[11px] font-semibold uppercase tracking-[0.16em] text-ink-3;
   }
 
   .field {
-    @apply w-full rounded-xl border border-white/[0.08] bg-obsidian-850/80 px-3.5 py-2.5 text-sm
-           text-paper-100 placeholder:text-paper-500/60 focus:border-forest-500/60 focus:bg-obsidian-850;
+    @apply w-full rounded-xl border border-line-strong bg-surface px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-3/70 focus:border-sage;
   }
 
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03]
-           px-3 py-1 text-xs text-paper-300;
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-surface-2 px-3 py-1 text-xs text-ink-2 transition-colors;
   }
 
   .chip-active {
-    @apply border-forest-500/60 bg-forest-500/15 text-paper-50;
+    @apply border-sage/55 bg-moss/15 text-ink;
   }
 
   .stat-value {
-    @apply font-serif text-2xl leading-none text-paper-50;
+    @apply font-serif text-2xl leading-none text-ink;
+  }
+
+  .alert {
+    @apply rounded-xl border px-3.5 py-2.5 text-xs leading-relaxed;
+    border-color: rgb(var(--amber) / 0.35);
+    background-color: rgb(var(--amber) / 0.09);
+    color: rgb(var(--amber-ink));
   }
 }
 

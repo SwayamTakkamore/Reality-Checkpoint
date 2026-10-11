@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { BookOpen, Compass, GitFork, Leaf } from 'lucide-react'
+import { BookOpen, Compass, GitFork, Leaf, Moon, Sun } from 'lucide-react'
 
 import { api, localPlayerId } from './lib/api.js'
 import DiagnosticBar from './components/DiagnosticBar.jsx'
@@ -14,6 +14,46 @@ const NAV = [
   { id: 'journal', label: 'Field Journal', icon: BookOpen },
   { id: 'storylines', label: 'Storylines', icon: GitFork },
 ]
+
+const THEME_KEY = 'reality-checkpoint.theme'
+
+function ThemeToggle() {
+  const [theme, setTheme] = useState(() =>
+    document.documentElement.classList.contains('dark') ? 'dark' : 'light',
+  )
+
+  const toggle = () => {
+    const next = theme === 'dark' ? 'light' : 'dark'
+    const root = document.documentElement
+    root.classList.toggle('dark', next === 'dark')
+    root.style.colorScheme = next
+    try {
+      window.localStorage.setItem(THEME_KEY, next)
+    } catch {
+      /* storage may be unavailable */
+    }
+    setTheme(next)
+  }
+
+  const dark = theme === 'dark'
+  const label = dark ? 'Switch to light mode' : 'Switch to dark mode'
+
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label={label}
+      title={label}
+      className="grid h-10 w-10 place-items-center rounded-xl border border-line bg-surface text-ink-2 transition-colors hover:border-sage/50 hover:text-ink"
+    >
+      {dark ? (
+        <Moon className="h-4 w-4" aria-hidden="true" />
+      ) : (
+        <Sun className="h-4 w-4" aria-hidden="true" />
+      )}
+    </button>
+  )
+}
 
 export default function App() {
   const [playerId] = useState(() => localPlayerId())
@@ -132,38 +172,41 @@ export default function App() {
       <header className="mx-auto w-full max-w-6xl px-5 pt-8 sm:pt-12">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="grid h-11 w-11 place-items-center rounded-2xl border border-forest-500/30 bg-forest-900/40">
-              <Leaf className="h-5 w-5 text-forest-400" aria-hidden="true" />
+            <span className="grid h-11 w-11 place-items-center rounded-2xl border border-pine/20 bg-moss/10">
+              <Leaf className="h-5 w-5 text-pine" aria-hidden="true" />
             </span>
             <div>
-              <h1 className="font-serif text-2xl leading-tight text-paper-50 sm:text-3xl">
+              <h1 className="font-serif text-2xl leading-tight text-ink sm:text-3xl">
                 Reality Checkpoint
               </h1>
-              <p className="text-xs text-paper-400">
+              <p className="text-xs text-ink-3">
                 A portal, not a destination. Touch grass, then report back.
               </p>
             </div>
           </div>
 
-          <nav className="flex items-center gap-1 rounded-2xl border border-white/[0.06] bg-obsidian-900/60 p-1">
-            {NAV.map(({ id, label, icon: Icon }) => (
-              <button
-                key={id}
-                type="button"
-                onClick={() => setView(id)}
-                aria-current={view === id ? 'page' : undefined}
-                className={
-                  'inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition-colors ' +
-                  (view === id
-                    ? 'bg-forest-600/25 text-paper-50'
-                    : 'text-paper-300 hover:bg-white/[0.04] hover:text-paper-100')
-                }
-              >
-                <Icon className="h-4 w-4" aria-hidden="true" />
-                <span className="hidden sm:inline">{label}</span>
-              </button>
-            ))}
-          </nav>
+          <div className="flex items-center gap-2">
+            <nav className="flex items-center gap-1 rounded-2xl border border-line bg-surface/70 p-1">
+              {NAV.map(({ id, label, icon: Icon }) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setView(id)}
+                  aria-current={view === id ? 'page' : undefined}
+                  className={
+                    'inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm transition-colors ' +
+                    (view === id
+                      ? 'bg-pine/12 text-ink'
+                      : 'text-ink-2 hover:bg-surface-2 hover:text-ink')
+                  }
+                >
+                  <Icon className="h-4 w-4" aria-hidden="true" />
+                  <span className="hidden sm:inline">{label}</span>
+                </button>
+              ))}
+            </nav>
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
@@ -199,7 +242,7 @@ export default function App() {
         {view === 'storylines' && <StorylineTree playerId={playerId} />}
       </main>
 
-      <footer className="mx-auto w-full max-w-6xl px-5 pb-8 text-xs text-paper-500">
+      <footer className="mx-auto w-full max-w-6xl px-5 pb-8 text-xs text-ink-3">
         <p>
           Hacktoberfest 2026 · Week 1 — “Touch Grass”. Runs against a local
           open-weight model through Ollama; degrades to deterministic

@@ -88,8 +88,8 @@ export default function DormantQuest({ quest, onReturn }) {
     return (
       <section className="mx-auto w-full max-w-3xl animate-riseIn">
         <div className="panel p-8 text-center">
-          <Compass className="mx-auto h-8 w-8 text-paper-400" />
-          <p className="mt-4 text-sm text-paper-300">No checkpoint is currently open.</p>
+          <Compass className="mx-auto h-8 w-8 text-ink-3" />
+          <p className="mt-4 text-sm text-ink-2">No checkpoint is currently open.</p>
           <button type="button" className="btn-primary mt-6" onClick={onReturn}>
             Back to the portal
           </button>
@@ -108,9 +108,9 @@ export default function DormantQuest({ quest, onReturn }) {
         <div className="flex flex-col items-center gap-10 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex flex-col items-center">
             <div className="relative h-64 w-64">
-              <span className="absolute inset-6 animate-ripple rounded-full border border-forest-400/25" />
+              <span className="absolute inset-6 animate-ripple rounded-full border border-sage/25" />
               <span
-                className="absolute inset-12 animate-ripple rounded-full border border-forest-400/15"
+                className="absolute inset-12 animate-ripple rounded-full border border-sage/15"
                 style={{ animationDelay: '1.4s' }}
               />
               <svg viewBox="0 0 256 256" className="relative h-64 w-64 -rotate-90">
@@ -125,7 +125,7 @@ export default function DormantQuest({ quest, onReturn }) {
                   cy="128"
                   r={RADIUS}
                   fill="none"
-                  stroke="rgba(255,255,255,0.06)"
+                  stroke="rgb(var(--line-strong))"
                   strokeWidth="10"
                 />
                 <circle
@@ -142,10 +142,10 @@ export default function DormantQuest({ quest, onReturn }) {
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="font-mono text-4xl tracking-tight text-paper-50">
+                <span className="font-mono text-4xl tracking-tight text-ink">
                   {formatClock(remaining)}
                 </span>
-                <span className="mt-1 text-[11px] uppercase tracking-[0.25em] text-paper-400">
+                <span className="mt-1 text-[11px] uppercase tracking-[0.25em] text-ink-3">
                   {finished ? 'interval complete' : running ? 'walking' : 'paused'}
                 </span>
               </div>
@@ -191,7 +191,7 @@ export default function DormantQuest({ quest, onReturn }) {
             </div>
 
             {finished && (
-              <p className="mt-5 flex items-center gap-2 text-sm text-forest-400">
+              <p className="mt-5 flex items-center gap-2 text-sm text-sage">
                 <Bell className="h-4 w-4" /> The bell rang. Take one more breath before you return.
               </p>
             )}
@@ -200,14 +200,14 @@ export default function DormantQuest({ quest, onReturn }) {
           <div className="w-full max-w-xl space-y-4">
             <div>
               <span className="label">{quest.storyline_title || 'Field checkpoint'}</span>
-              <h2 className="mt-2 font-serif text-2xl text-paper-50">{quest.title}</h2>
+              <h2 className="mt-2 font-serif text-2xl text-ink">{quest.title}</h2>
             </div>
 
             <div className="panel-quiet p-5">
               <span className="label flex items-center gap-2">
                 <Sparkles className="h-3.5 w-3.5" /> The mission
               </span>
-              <p className="mt-3 whitespace-pre-line text-[15px] leading-relaxed text-paper-100">
+              <p className="mt-3 whitespace-pre-line text-[15px] leading-relaxed text-ink">
                 {quest.mission_prompt}
               </p>
             </div>
@@ -215,20 +215,20 @@ export default function DormantQuest({ quest, onReturn }) {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="panel-quiet p-5">
                 <span className="label">Sensory focus</span>
-                <p className="mt-2 text-sm text-paper-200">{quest.sensory_focus}</p>
+                <p className="mt-2 text-sm text-ink-2">{quest.sensory_focus}</p>
               </div>
               <div className="panel-quiet p-5">
                 <span className="label flex items-center gap-2">
                   <ShieldCheck className="h-3.5 w-3.5" /> Boundaries
                 </span>
-                <p className="mt-2 text-sm text-paper-200">{quest.safe_boundaries}</p>
+                <p className="mt-2 text-sm text-ink-2">{quest.safe_boundaries}</p>
               </div>
             </div>
 
             {quest.memory_anchor && (
-              <div className="panel-quiet border-forest-700/40 p-5">
+              <div className="panel-quiet border-sage/30 p-5">
                 <span className="label">Continuity anchor</span>
-                <p className="mt-2 font-serif text-sm italic text-paper-100">
+                <p className="mt-2 font-serif text-sm italic text-ink">
                   {quest.memory_anchor}
                 </p>
               </div>
@@ -236,7 +236,7 @@ export default function DormantQuest({ quest, onReturn }) {
 
             <div className="panel-quiet p-5">
               <span className="label">Hold this question</span>
-              <p className="mt-2 font-serif text-sm italic text-paper-200">
+              <p className="mt-2 font-serif text-sm italic text-ink-2">
                 {quest.follow_up_prompt}
               </p>
             </div>
@@ -245,7 +245,7 @@ export default function DormantQuest({ quest, onReturn }) {
               <button type="button" className="btn-primary shadow-glow" onClick={onReturn}>
                 I have returned
               </button>
-              <span className="text-xs text-paper-400">
+              <span className="text-xs text-ink-3">
                 The screen sleeps now. The world does not.
               </span>
             </div>

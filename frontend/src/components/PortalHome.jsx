@@ -16,12 +16,12 @@ import { MOODS, SENSORY_MODES, TIME_BUDGETS, storylineLabel } from '../lib/api.j
 function Stat({ icon: Icon, label, value, hint }) {
   return (
     <div className="panel-quiet p-3.5">
-      <div className="flex items-center gap-2 text-paper-400">
+      <div className="flex items-center gap-2 text-ink-3">
         <Icon className="h-3.5 w-3.5" aria-hidden="true" />
         <span className="label">{label}</span>
       </div>
       <div className="mt-2 stat-value">{value}</div>
-      {hint ? <div className="mt-1 text-[11px] text-paper-500">{hint}</div> : null}
+      {hint ? <div className="mt-1 text-[11px] text-ink-3">{hint}</div> : null}
     </div>
   )
 }
@@ -51,30 +51,30 @@ export default function PortalHome({ player, status, error, busy, onBegin, onRes
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div className="max-w-xl">
             <p className="label">Level {level} · {player?.name || 'Wanderer'}</p>
-            <h2 className="mt-2 font-serif text-3xl leading-snug text-paper-50 sm:text-4xl">
+            <h2 className="mt-2 font-serif text-3xl leading-snug text-ink sm:text-4xl">
               Step through, then put the screen down.
             </h2>
-            <p className="mt-3 text-sm leading-relaxed text-paper-300">
+            <p className="mt-3 text-sm leading-relaxed text-ink-2">
               The checkpoint generates a single bespoke mission for the world
               outside your door. Minutes later you come back and describe what
               happened — and the story remembers.
             </p>
           </div>
 
-          <div className="min-w-[15rem] flex-1 rounded-2xl border border-white/[0.06] bg-obsidian-900/60 p-4">
+          <div className="min-w-[15rem] flex-1 rounded-2xl border border-line bg-surface-2 p-4">
             <div className="flex items-baseline justify-between">
               <span className="label">Attention earned</span>
-              <span className="font-mono text-xs text-paper-400">
+              <span className="font-mono text-xs text-ink-3">
                 {xp} / {xpToNext} xp
               </span>
             </div>
-            <div className="mt-2 h-2 overflow-hidden rounded-full bg-obsidian-700">
+            <div className="mt-2 h-2 overflow-hidden rounded-full bg-track">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-forest-600 to-forest-400 transition-[width] duration-500"
+                className="h-full rounded-full bg-gradient-to-r from-pine to-sage transition-[width] duration-500"
                 style={{ width: `${pct}%` }}
               />
             </div>
-            <p className="mt-2 text-[11px] text-paper-500">
+            <p className="mt-2 text-[11px] text-ink-3">
               {Math.max(0, xpToNext - xp)} xp to level {level + 1}
             </p>
           </div>
@@ -102,8 +102,8 @@ export default function PortalHome({ player, status, error, busy, onBegin, onRes
         <section className="panel flex flex-wrap items-center justify-between gap-4 p-5">
           <div>
             <p className="label">A checkpoint is still open</p>
-            <p className="mt-1 font-serif text-lg text-paper-100">{active.title}</p>
-            <p className="text-xs text-paper-400">
+            <p className="mt-1 font-serif text-lg text-ink">{active.title}</p>
+            <p className="text-xs text-ink-3">
               {storylineLabel(active.storyline_id)} · {active.duration_minutes} min ·{' '}
               {active.generated_by}
             </p>
@@ -117,8 +117,8 @@ export default function PortalHome({ player, status, error, busy, onBegin, onRes
 
       <section className="panel p-6 sm:p-7">
         <div className="flex items-center gap-2">
-          <Compass className="h-4 w-4 text-forest-400" aria-hidden="true" />
-          <h3 className="font-serif text-xl text-paper-50">Open a checkpoint</h3>
+          <Compass className="h-4 w-4 text-sage" aria-hidden="true" />
+          <h3 className="font-serif text-xl text-ink">Open a checkpoint</h3>
         </div>
 
         <div className="mt-6 space-y-6">
@@ -156,7 +156,7 @@ export default function PortalHome({ player, status, error, busy, onBegin, onRes
                 </button>
               ))}
             </div>
-            <p className="mt-2 text-[11px] text-paper-500">
+            <p className="mt-2 text-[11px] text-ink-3">
               {SENSORY_MODES.find((m) => m.id === theme)?.hint}
             </p>
           </div>
@@ -186,7 +186,7 @@ export default function PortalHome({ player, status, error, busy, onBegin, onRes
               </label>
               <div className="relative mt-2.5">
                 <MapPin
-                  className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-paper-500"
+                  className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-3"
                   aria-hidden="true"
                 />
                 <input
@@ -201,11 +201,7 @@ export default function PortalHome({ player, status, error, busy, onBegin, onRes
             </div>
           </div>
 
-          {error ? (
-            <p className="rounded-xl border border-amber-400/25 bg-amber-400/[0.06] px-3.5 py-2.5 text-xs text-amber-200">
-              {error}
-            </p>
-          ) : null}
+          {error ? <p className="alert">{error}</p> : null}
 
           <div className="flex flex-wrap items-center gap-3">
             <button
@@ -221,7 +217,7 @@ export default function PortalHome({ player, status, error, busy, onBegin, onRes
               )}
               {busy ? 'Composing your mission…' : 'Begin checkpoint'}
             </button>
-            <span className="text-[11px] text-paper-500">
+            <span className="text-[11px] text-ink-3">
               One mission. No feed. Come back and tell us everything.
             </span>
           </div>

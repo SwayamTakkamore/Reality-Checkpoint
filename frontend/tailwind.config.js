@@ -1,44 +1,69 @@
 /** @type {import('tailwindcss').Config} */
+const rgb = (v) => `rgb(var(--${v}) / <alpha-value>)`
+
 export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        // Obsidian: the night the checkpoint opens into.
-        obsidian: {
-          950: '#070a09',
-          900: '#0b0f0e',
-          850: '#101614',
-          800: '#161d1a',
-          700: '#1e2724',
-          600: '#2a3531',
-        },
-        // Forest green: the world outside.
+        // Semantic tokens, driven by CSS variables so the whole UI
+        // flips between the daylight and night palettes.
+        canvas: rgb('canvas'),
+        'canvas-2': rgb('canvas-2'),
+        surface: rgb('surface'),
+        'surface-2': rgb('surface-2'),
+        'surface-3': rgb('surface-3'),
+        line: rgb('line'),
+        'line-strong': rgb('line-strong'),
+        ink: rgb('ink'),
+        'ink-2': rgb('ink-2'),
+        'ink-3': rgb('ink-3'),
+        pine: rgb('pine'),
+        sage: rgb('sage'),
+        moss: rgb('moss'),
+        'moss-deep': rgb('moss-deep'),
+        amber: rgb('amber'),
+        'amber-ink': rgb('amber-ink'),
+        track: rgb('track'),
+
+        // Botanical pine / sage moss.
         forest: {
-          500: '#3f8f68',
-          400: '#4da97c',
-          600: '#2f6b4f',
-          700: '#245240',
-          900: '#12291f',
+          500: rgb('sage'),
+          400: rgb('sage'),
+          600: rgb('pine'),
+          700: rgb('moss-deep'),
+          900: rgb('moss-deep'),
         },
-        // Warm paper: the journal you carry back in.
+        // Warm paper, now the readable ink scale.
         paper: {
-          50: '#f7f3e9',
-          100: '#efe8d8',
-          200: '#e2d8c2',
-          300: '#cdbfa2',
-          400: '#a9977a',
-          500: '#8a7a5e',
+          50: rgb('ink'),
+          100: rgb('ink'),
+          200: rgb('ink-2'),
+          300: rgb('ink-2'),
+          400: rgb('ink-3'),
+          500: rgb('ink-3'),
+        },
+        // Obsidian surfaces, now the layered canvas scale.
+        obsidian: {
+          950: rgb('canvas'),
+          900: rgb('surface'),
+          850: rgb('surface-2'),
+          800: rgb('surface-3'),
+          700: rgb('track'),
+          600: rgb('scroll'),
         },
       },
       fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        serif: ['Spectral', 'Georgia', 'ui-serif', 'serif'],
+        sans: ['Plus Jakarta Sans', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        serif: ['Newsreader', 'Spectral', 'Georgia', 'ui-serif', 'serif'],
         mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       boxShadow: {
-        glow: '0 0 0 1px rgba(77,169,124,0.18), 0 18px 60px -24px rgba(63,143,104,0.45)',
-        inner_soft: 'inset 0 1px 0 0 rgba(255,255,255,0.04)',
+        natural: 'var(--shadow-natural)',
+        lift: 'var(--shadow-lift)',
+        glow: 'var(--shadow-glow)',
+        inner_soft: 'inset 0 1px 0 0 rgb(var(--ink) / 0.04)',
       },
       keyframes: {
         breathe: {

@@ -83,10 +83,10 @@ export default function FieldJournal({ playerId }) {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="label">Field journal</p>
-            <h2 className="mt-1.5 font-serif text-2xl text-paper-50 sm:text-3xl">
+            <h2 className="mt-1.5 font-serif text-2xl text-ink sm:text-3xl">
               What the world has told you
             </h2>
-            <p className="mt-1 text-xs text-paper-400">
+            <p className="mt-1 text-xs text-ink-3">
               {count} {count === 1 ? 'memory' : 'memories'} recorded
               {filtered ? ' matching this filter' : ' so far'}
             </p>
@@ -109,7 +109,7 @@ export default function FieldJournal({ playerId }) {
         <div className="mt-6 space-y-4">
           <div className="relative">
             <Search
-              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-paper-500"
+              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-3"
               aria-hidden="true"
             />
             <input
@@ -125,7 +125,7 @@ export default function FieldJournal({ playerId }) {
                 type="button"
                 onClick={() => setSearch('')}
                 aria-label="Clear search"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-paper-500 transition-colors hover:text-paper-100"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-3 transition-colors hover:text-ink"
               >
                 <X className="h-4 w-4" aria-hidden="true" />
               </button>
@@ -155,29 +155,25 @@ export default function FieldJournal({ playerId }) {
           ) : null}
         </div>
 
-        {error ? (
-          <p className="mt-5 rounded-xl border border-amber-400/25 bg-amber-400/[0.06] px-3.5 py-2.5 text-xs text-amber-200">
-            {error}
-          </p>
-        ) : null}
+        {error ? <p className="alert mt-5">{error}</p> : null}
       </section>
 
       <section className="panel p-6 sm:p-8">
         {loading ? (
-          <div className="flex items-center justify-center gap-2 py-16 text-sm text-paper-400">
+          <div className="flex items-center justify-center gap-2 py-16 text-sm text-ink-3">
             <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
             Reading the journal…
           </div>
         ) : items.length === 0 ? (
           <div className="py-14 text-center">
             <BookOpen
-              className="mx-auto h-7 w-7 text-paper-500"
+              className="mx-auto h-7 w-7 text-ink-3"
               aria-hidden="true"
             />
-            <p className="mt-3 font-serif text-lg text-paper-100">
+            <p className="mt-3 font-serif text-lg text-ink">
               {filtered ? 'Nothing matches that yet.' : 'The journal is still blank.'}
             </p>
-            <p className="mt-1.5 text-sm text-paper-400">
+            <p className="mt-1.5 text-sm text-ink-3">
               {filtered
                 ? 'Try a different word or clear the filter.'
                 : 'Complete a checkpoint and your observations will gather here.'}
@@ -194,15 +190,15 @@ export default function FieldJournal({ playerId }) {
                       #{tag}
                     </span>
                   ))}
-                  <span className="ml-auto font-mono text-[11px] text-paper-500">
+                  <span className="ml-auto font-mono text-[11px] text-ink-3">
                     {formatWhen(memory.timestamp)}
                   </span>
                 </div>
-                <p className="mt-3 text-sm leading-relaxed text-paper-200">
+                <p className="mt-3 text-sm leading-relaxed text-ink-2">
                   {memory.observation}
                 </p>
                 {memory.continuity_anchor ? (
-                  <p className="mt-3 border-l-2 border-forest-500/40 pl-3 text-[11px] italic text-forest-400">
+                  <p className="mt-3 border-l-2 border-sage/40 pl-3 text-[11px] italic text-sage">
                     anchor: {memory.continuity_anchor}
                   </p>
                 ) : null}
