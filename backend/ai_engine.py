@@ -44,6 +44,10 @@ OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "glm-4.7-flash")
 OLLAMA_TIMEOUT = float(os.environ.get("OLLAMA_TIMEOUT", "45"))
 
+HF_MODEL_ID = os.environ.get("HF_MODEL_ID", "Qwen/Qwen2.5-0.5B-Instruct")
+DISABLE_HF = os.environ.get("REALITY_DISABLE_HF", "0") == "1"
+
+
 CATEGORY_VOCAB = [
     "Observation", "Sound", "Texture", "Light", "Movement", "Place",
     "Creature", "Material", "Weather", "People", "Memory", "Insight",
@@ -107,7 +111,13 @@ class AIEngine:
         timeout: float = OLLAMA_TIMEOUT,
         enabled: bool = True,
         rng: Optional[random.Random] = None,
+        hf_model_id: str = HF_MODEL_ID,
     ) -> None:
+        self.hf_model_id = hf_model_id
+        self.hf_enabled = (not DISABLE_HF) and os.environ.get("REALITY_DISABLE_HF") != "1"
+        self._hf_model = None
+        self._hf_tokenizer = None
+        self._hf_initialized = False
         self.base_url = base_url.rstrip("/")
         self.model = model
         self.timeout = timeout
@@ -137,28 +147,82 @@ class AIEngine:
         self._client = None
 
     async def health(self, force: bool = False) -> Dict[str, Any]:
-        """Cheap probe of the local daemon; cached for 15 seconds."""
+        """Probe local HF Transformers engine or Ollama daemon; cached for 15s."""
         now = time.time()
         if not force and now - float(self._health.get("checked_at", 0)) < 15:
             return self._health
-        if not self.enabled:
-            self._health = {"reachable": False, "latency_ms": None, "models": [], "checked_at": now}
-            return self._health
-        started = time.perf_counter()
-        try:
-            client = await self._get_client()
-            resp = await client.get("/api/tags")
-            resp.raise_for_status()
-            models = [m.get("name", "") for m in resp.json().get("models", [])]
-            self._health = {
-                "reachable": True,
-                "latency_ms": round((time.perf_counter() - started) * 1000, 2),
-                "models": models,
-                "checked_at": now,
-            }
-        except Exception:
-            self._health = {"reachable": False, "latency_ms": None, "models": [], "checked_at": now}
+
+        hf_ok = False
+        hf_latency = None
+        if self.hf_enabled:
+            t0 = time.perf_counter()
+            hf_ok = self._ensure_hf()
+            if hf_ok:
+                hf_latency = round((time.perf_counter() - t0) * 1000, 2)
+
+        ollama_ok = False
+        ollama_latency = None
+        models = []
+        if self.enabled and not hf_ok:
+            t0 = time.perf_counter()
+            try:
+                client = await self._get_client()
+                resp = await client.get("/api/tags")
+                if resp.status_code == 200:
+                    models = [m.get("name", "") for m in resp.json().get("models", [])]
+                    ollama_ok = True
+                    ollama_latency = round((time.perf_counter() - t0) * 1000, 2)
+            except Exception:
+                pass
+
+        self._health = {
+            "hf_available": hf_ok,
+            "hf_model": self.hf_model_id if hf_ok else None,
+            "hf_latency_ms": hf_latency,
+            "ollama_reachable": ollama_ok,
+            "ollama_model": self.model if ollama_ok else None,
+            "ollama_latency_ms": ollama_latency,
+            "models": [self.hf_model_id] if hf_ok else models,
+            "checked_at": now,
+        }
         return self._health
+
+    def _ensure_hf(self) -> bool:
+        if not self.hf_enabled:
+            return False
+        if self._hf_initialized:
+            return self._hf_model is not None
+        try:
+            from transformers import AutoModelForCausalLM, AutoTokenizer
+            self._hf_tokenizer = AutoTokenizer.from_pretrained(self.hf_model_id)
+            self._hf_model = AutoModelForCausalLM.from_pretrained(self.hf_model_id)
+            self._hf_initialized = True
+            return True
+        except Exception:
+            self._hf_initialized = True
+            self._hf_model = None
+            return False
+
+    def _generate_hf_json(self, system: str, user: str, max_tokens: int = 300) -> Optional[Dict[str, Any]]:
+        if not self._ensure_hf() or self._hf_model is None or self._hf_tokenizer is None:
+            return None
+        try:
+            messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
+            text = self._hf_tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+            inputs = self._hf_tokenizer(text, return_tensors="pt")
+            outputs = self._hf_model.generate(
+                **inputs,
+                max_new_tokens=max_tokens,
+                temperature=0.6,
+                top_p=0.9,
+                do_sample=True,
+                pad_token_id=self._hf_tokenizer.eos_token_id,
+            )
+            gen = outputs[0][inputs.input_ids.shape[1]:]
+            resp_str = self._hf_tokenizer.decode(gen, skip_special_tokens=True)
+            return extract_json(resp_str)
+        except Exception:
+            return None
 
     # -- low-level generation --------------------------------------------
 
@@ -265,11 +329,28 @@ class AIEngine:
 
         draft: Optional[AIQuestDraft] = None
         used_model: Optional[str] = None
-        if self.enabled:
-            raw = await self._chat_json(
-                self._quest_system_prompt(),
-                self._quest_user_prompt(request, storyline, chapter, memories, anchors),
-            )
+        generated_by = "heuristic"
+
+        sys_prompt = self._quest_system_prompt()
+        user_prompt = self._quest_user_prompt(request, storyline, chapter, memories, anchors)
+
+        # 1. Try local Hugging Face Transformers
+        if self.hf_enabled:
+            raw_hf = self._generate_hf_json(sys_prompt, user_prompt, max_tokens=300)
+            if raw_hf is not None:
+                candidate = self._coerce_quest_draft(raw_hf)
+                if candidate is not None:
+                    ok, violations, _ = safety.validate_quest(
+                        candidate.title, candidate.mission_prompt, candidate.follow_up_prompt, candidate.sensory_focus
+                    )
+                    if ok and candidate.mission_prompt:
+                        draft = candidate
+                        used_model = self.hf_model_id
+                        generated_by = "transformers"
+
+        # 2. Try Ollama if HF did not produce a draft
+        if draft is None and self.enabled:
+            raw = await self._chat_json(sys_prompt, user_prompt)
             if raw is not None:
                 candidate = self._coerce_quest_draft(raw)
                 if candidate is not None:
@@ -279,8 +360,8 @@ class AIEngine:
                     if ok and candidate.mission_prompt:
                         draft = candidate
                         used_model = self.model
+                        generated_by = "ollama"
 
-        generated_by = "ollama"
         if draft is None:
             draft = self._heuristic_quest(request, storyline, chapter, anchors)
             generated_by = "heuristic"
@@ -398,12 +479,22 @@ class AIEngine:
         generated_by = "heuristic"
         used_model: Optional[str] = None
 
-        if self.enabled:
-            raw = await self._chat_json(
-                self._eval_system_prompt(),
-                self._eval_user_prompt(quest, reflection),
-                temperature=0.6,
-            )
+        sys_eval = self._eval_system_prompt()
+        user_eval = self._eval_user_prompt(quest, reflection)
+
+        # 1. Try local Hugging Face Transformers
+        if self.hf_enabled:
+            raw_hf = self._generate_hf_json(sys_eval, user_eval, max_tokens=300)
+            if raw_hf is not None:
+                candidate = self._coerce_evaluation_draft(raw_hf)
+                if candidate is not None:
+                    draft = candidate
+                    generated_by = "transformers"
+                    used_model = self.hf_model_id
+
+        # 2. Try Ollama if HF did not evaluate
+        if draft is heuristic and self.enabled:
+            raw = await self._chat_json(sys_eval, user_eval, temperature=0.6)
             if raw is not None:
                 candidate = self._coerce_evaluation_draft(raw)
                 if candidate is not None:

@@ -20,6 +20,7 @@ import pytest
 _TMP_DB = os.path.join(tempfile.mkdtemp(prefix="rc-tests-"), "test.db")
 os.environ["REALITY_DB_PATH"] = _TMP_DB
 os.environ["REALITY_DISABLE_OLLAMA"] = "1"
+os.environ["REALITY_DISABLE_HF"] = "1"
 
 from fastapi.testclient import TestClient  # noqa: E402
 

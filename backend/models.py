@@ -95,7 +95,7 @@ class Quest(BaseModel):
         default=None,
         description="The past Reality Memory this quest is built on, if any.",
     )
-    generated_by: Literal["ollama", "heuristic"] = "heuristic"
+    generated_by: Literal["transformers", "ollama", "heuristic"] = "heuristic"
     model: Optional[str] = None
     created_at: datetime = Field(default_factory=utcnow)
     status: Literal["active", "completed", "abandoned"] = "active"
@@ -127,7 +127,7 @@ class EvaluationResult(BaseModel):
     new_level: int
     total_xp: int
     leveled_up: bool = False
-    evaluated_by: Literal["ollama", "heuristic"] = "heuristic"
+    evaluated_by: Literal["transformers", "ollama", "heuristic"] = "heuristic"
     model: Optional[str] = None
 
 
@@ -170,12 +170,15 @@ class SystemStatus(BaseModel):
     service: str = "Reality Checkpoint"
     version: str = "1.0.0"
     theme: str = "Hacktoberfest 2026 — Week 1: Touch Grass"
+    hf_available: bool = False
+    hf_model: Optional[str] = None
+    hf_latency_ms: Optional[float] = None
     ollama_reachable: bool = False
     ollama_model: Optional[str] = None
     ollama_latency_ms: Optional[float] = None
     available_models: List[str] = Field(default_factory=list)
     database: str = "ok"
-    ai_mode: Literal["ollama", "heuristic"] = "heuristic"
+    ai_mode: Literal["transformers", "ollama", "heuristic"] = "heuristic"
     uptime_seconds: float = 0.0
     time: datetime = Field(default_factory=utcnow)
 
@@ -208,8 +211,8 @@ class AIQuestDraft(BaseModel):
 class AIEvaluationDraft(BaseModel):
     xp_earned: int = 25
     quality_score: int = 55
-    feedback: str = "You showed up. That counts."
-    observation: str = ""
+    feedback: str = "You showed up, and that is the whole game."
+    observation: Optional[str] = None
     category: str = "Observation"
     tags: List[str] = Field(default_factory=list)
     continuity_anchor: Optional[str] = None

@@ -92,8 +92,8 @@ export default function PortalHome({ player, status, error, busy, onBegin, onRes
           <Stat
             icon={Sparkles}
             label="Mode"
-            value={status?.ollama_reachable ? 'Live' : 'Fallback'}
-            hint={status?.ollama_model || 'deterministic heuristics'}
+            value={status?.hf_available || status?.ollama_reachable ? 'Live Local' : 'Fallback'}
+            hint={status?.hf_model || status?.ollama_model || 'deterministic heuristics'}
           />
         </div>
       </section>

@@ -2,9 +2,14 @@ import { Activity, Cpu, Database, RefreshCw, WifiOff } from 'lucide-react'
 import { formatDuration } from '../lib/api.js'
 
 export default function DiagnosticBar({ status, error, onRefresh, playerId }) {
-  const reachable = Boolean(status?.ollama_reachable)
+  const isHf = Boolean(status?.hf_available)
+  const isOllama = Boolean(status?.ollama_reachable)
+  const reachable = isHf || isOllama
   const mode = status?.ai_mode
   const offline = Boolean(error) || (!status && !error)
+
+  const activeModel = status?.hf_model || status?.ollama_model || 'no model'
+  const activeLatency = status?.hf_latency_ms ?? status?.ollama_latency_ms
 
   const tone = error
     ? 'text-paper-400'
@@ -31,21 +36,23 @@ export default function DiagnosticBar({ status, error, onRefresh, playerId }) {
           <span className={tone}>
             {error
               ? 'backend unreachable'
-              : mode === 'ollama'
-                ? 'local model live'
-                : 'heuristic mode'}
+              : mode === 'transformers'
+                ? 'HuggingFace local'
+                : mode === 'ollama'
+                  ? 'Ollama local'
+                  : 'heuristic mode'}
           </span>
         </span>
 
         <span className="inline-flex items-center gap-1.5">
           <Cpu className="h-3.5 w-3.5" aria-hidden="true" />
-          {status?.ollama_model || 'no model'}
+          {activeModel}
         </span>
 
         <span className="inline-flex items-center gap-1.5">
           <Activity className="h-3.5 w-3.5" aria-hidden="true" />
-          {status?.ollama_latency_ms != null
-            ? `${Math.round(status.ollama_latency_ms)} ms`
+          {activeLatency != null
+            ? `${Math.round(activeLatency)} ms`
             : '— ms'}
         </span>
 
@@ -65,7 +72,7 @@ export default function DiagnosticBar({ status, error, onRefresh, playerId }) {
         {status?.available_models?.length ? (
           <span className="hidden items-center gap-1.5 xl:inline-flex">
             {status.available_models.length} model
-            {status.available_models.length === 1 ? '' : 's'} installed
+            {status.available_models.length === 1 ? '' : 's'} loaded
           </span>
         ) : null}
 

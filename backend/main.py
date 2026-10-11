@@ -101,14 +101,26 @@ app.add_middleware(
 async def status() -> SystemStatus:
     ai = engine()
     health = await ai.health()
-    reachable = bool(health.get("reachable"))
+    hf_ok = bool(health.get("hf_available"))
+    ollama_ok = bool(health.get("ollama_reachable"))
+    
+    if hf_ok:
+        mode = "transformers"
+    elif ollama_ok:
+        mode = "ollama"
+    else:
+        mode = "heuristic"
+
     return SystemStatus(
-        ollama_reachable=reachable,
-        ollama_model=ai.model if reachable else None,
-        ollama_latency_ms=health.get("latency_ms"),
+        hf_available=hf_ok,
+        hf_model=health.get("hf_model"),
+        hf_latency_ms=health.get("hf_latency_ms"),
+        ollama_reachable=ollama_ok,
+        ollama_model=health.get("ollama_model"),
+        ollama_latency_ms=health.get("ollama_latency_ms"),
         available_models=list(health.get("models") or []),
         database="ok",
-        ai_mode="ollama" if (reachable and ai.enabled) else "heuristic",
+        ai_mode=mode,
         uptime_seconds=round(time.time() - getattr(app.state, "started_at", time.time()), 3),
     )
 

@@ -1,6 +1,6 @@
 ---
-title: Reality Checkpoint — The Game That Asks You to Put Your Phone Away
-published: false
+title: Reality Checkpoint — The AI Game That Asks You to Put Your Phone Away
+published: true
 tags: devchallenge, hf26challenge, ai, opensource
 cover_image: https://raw.githubusercontent.com/devrelay/reality-checkpoint/main/assets/cover.png
 description: An AI-powered real-world adventure game running on open-weight models that turns ordinary surroundings into quests. Screen is dormant; reality is the game.
@@ -8,75 +8,65 @@ description: An AI-powered real-world adventure game running on open-weight mode
 
 *This is a submission for the [Hacktoberfest Open-Source AI Challenge Week 1: Touch Grass](https://dev.to/challenges/hacktoberfest-week1-2026-10-05)*
 
----
+## What I Built
 
-## 1. What I Built
+Most modern apps and games treat human attention as oil to be drilled: infinite notification loops, engagement algorithms, red notification dots, and continuous screen gaze. Even outdoor and fitness games frequently double down on screen fixation—requiring players to stare into an augmented-reality viewfinder, check a real-time GPS map at street corners, or snap mandatory surveillance photos of every waypoint.
 
-Most modern apps and mobile games treat human attention as oil to be extracted: endless notification loops, algorithmic feeds, visual dopamine slots, and continuous screen gaze. When games try to take people outside, they often double down on screen fixation—requiring you to stare at a GPS map, hold an AR viewfinder in front of your face, or upload surveillance photos of every tree you pass.
+**Reality Checkpoint** flips the paradigm completely upside down:
 
-**Reality Checkpoint** flips that paradigm completely upside down:
+> **The phone is the portal, not the destination.**
 
-> **The screen is a portal, not the destination.**
+Reality Checkpoint is an AI-powered, real-world adventure game that turns everyday physical surroundings into personalized quests. You spend 30 seconds choosing your available time window (5, 10, 15, or 30 minutes), select a sensory focus (optics/shadows, urban flora, soundscapes, micro-physics, or fleeting encounters), and receive a bespoke, grounded mission.
 
-Reality Checkpoint is an AI-powered real-world adventure game that turns your everyday physical surroundings into branching narrative quests. You open the app, choose your available time budget (5, 10, 15, or 30 minutes), pick a sensory focus, and receive a bespoke, grounded mission. 
+Then, **the screen goes dormant**.
 
-Then, **the screen goes dormant**. 
+The app enters an ambient, low-power dormant mode with a subtle breathing ring and a quiet countdown. There are no feeds, no popups, and no ads. You put the phone in your pocket, step outside, and experience physical reality with your own senses. When your time window is up, an organic audio chime sounds via the Web Audio API. 
 
-The app enters an ambient, low-power quest mode featuring a gentle breathing ring and an unobtrusive timer. No feeds, no ads, no popups. You put your phone in your pocket and step into the physical world: noticing light and shadow, mapping urban flora, isolating sonic frequencies, or examining the micro-physics of entropy on physical materials.
-
-When you return, you describe what you genuinely experienced. An open-weight AI model on your machine evaluates the quality of your reflection, awards observational XP, adapts future missions, and indexes what you noticed into your persistent **Field Journal**.
+When you return, you describe what you noticed. A local open-weight AI model evaluates your reflection, rewards genuine sensory attention, poses Socratic follow-up questions, and files what you discovered into a persistent, evolving **Field Journal** using **Reality Memory™**.
 
 ```
-[30s Setup] ──> [Bespoke Quest] ──> [Phone in Pocket / Screen Dormant] ──> [Return & Reflect] ──> [Reality Memory™ compounds]
+[30s Setup] ──> [Bespoke Quest] ──> [Phone in Pocket / Screen Dormant] ──> [Return & Reflect] ──> [Reality Memory™ Compounds]
 ```
 
----
-
-## 2. The Core Mechanics
-
-Reality Checkpoint is built around five distinctive mechanics:
-
-1. **The Dormant Screen**: During quests, the screen minimizes visual noise. It acts as an ambient pocket timer that plays an organic chime (via Web Audio API) only when your time window completes.
-2. **Reality Memory™ (Signature Mechanic)**: The game doesn't just record scores and generic streaks; it builds an episodic memory of what you have noticed about the physical world. If you observe lichens on a north-facing stone wall on Day 1, future quests recall that specific observation to explore moisture gradients or weathering.
-3. **Five Reactive Storylines**:
-   - 🌓 **The Architecture of Shadows**: Sunlight geometry, casting edges, and optical shifts.
-   - 🌿 **Urban Biomecartography**: Flora colonizing pavement cracks, micro-climates, and mosses.
-   - 🔊 **The Acoustic Commons**: Distant traffic hum, wind resonance, bird calls, and reverberation.
-   - 🔬 **The Micro-Physics of Daily Life**: Rust, friction, surface wear, weathering, and thermal mass.
-   - 🧭 **Ephemeral Encounters**: Fleeting atmospheric moments, human movement, and serendipity.
-4. **Attention Over Surveillance**: We intentionally reject GPS geofencing, step-counting trackers, and forced camera uploads. The open-weight model rewards *depth of sensory attention* and *perceptual nuance*. Socratic follow-up questions verify mindfulness organically.
-5. **Safety Guardrails**: Strict multi-layer safety filters guarantee missions never ask players to trespass, enter private property, touch hazardous objects, approach strangers, or look at a screen while crossing roads.
+### Who It Is For
+- **Digital workers & developers** suffering from screen fatigue who need a tangible, rewarding reason to step away from their desk for 10 minutes.
+- **Urban explorers & flâneurs** who want to rediscover familiar neighborhoods through fresh sensory lenses.
+- **Mindfulness & curiosity seekers** who prefer playful exploration over structured meditation timers or invasive fitness trackers.
 
 ---
 
-## 3. Demo
+## Demo
 
-Below is the gameplay walkthrough of a 10-minute observation quest in "The Architecture of Shadows":
-
-1. **Mission Generation**: The open-weight model creates *"The Long Shadow"*, asking the player to observe the contrast boundary where sunlight and iron railing meet.
-2. **Dormant Mode**: The user locks their phone or lets the screen sleep while observing outdoors.
-3. **Return & Reflection**: The player submits:
-   > *"I observed a jagged cast shadow from an iron balcony railing. The shadow shifted across the pavement by roughly two inches over ten minutes, softening along the penumbra as high clouds passed."*
-4. **AI Socratic Synthesis**: The model evaluates the perceptual quality, awards 46 XP, and logs a permanent memory node tagged `[visual, kinetic, light]`.
-5. **Field Journal & Markdown Export**: The player views their living chronicle of real-world phenomena.
+- **Live Repository & Quickstart**: [github.com/devrelay/reality-checkpoint](https://github.com/devrelay/reality-checkpoint)
+- **Local Walkthrough**:
+  1. **Launch**: Run `./start.sh` and open `http://localhost:8000` on any desktop or mobile browser.
+  2. **Select Parameters**: Choose a 10-minute budget with the theme *"The Architecture of Shadows"*.
+  3. **Receive Quest**: The local model generates *"The Long Shadow"*, directing you to observe how sunlight and cast iron meet at a physical railing.
+  4. **Dormant Mode**: The screen dims into a minimalist breathing timer. The device goes into your pocket.
+  5. **Return & Socratic Reflection**: You return and input:
+     > *"I observed a jagged cast shadow from an iron balcony railing. The sunlight shifted by roughly two inches over ten minutes, softening along the penumbra as high clouds passed."*
+  6. **Evaluation & Memory Extraction**: The open-weight model awards 46 XP, validates your observational depth, and files an episodic memory node (`Category: Light, Tags: [visual, kinetic]`) into your persistent Field Journal.
 
 ---
 
-## 4. Code & Architecture
+## Code
 
-- **GitHub Repository**: [devrelay/reality-checkpoint](https://github.com/devrelay/reality-checkpoint) *(Open Source under MIT License)*
-- **Architecture Overview**:
+The entire codebase is open source under the MIT License:
+
+{% github devrelay/reality-checkpoint %}
+
+### Project Architecture
 
 ```mermaid
 flowchart TD
-    Client["📱 Responsive Web App & PWA<br/>(React + Tailwind + Web Audio)"]
-    API["⚡ FastAPI Engine<br/>(Python 3.11+)"]
-    LLM["🧠 Open-Weight LLM<br/>(Ollama / glm-4.7-flash)"]
-    DB[("💾 Local SQLite DB<br/>(reality_checkpoint.db)")]
+    Client["📱 Responsive PWA / Mobile Web<br/>(React 18 + Tailwind + Web Audio)"]
+    API["⚡ FastAPI Backend Engine<br/>(Python 3.11+)"]
+    LLM["🧠 Local Open-Weight LLM<br/>(Hugging Face Transformers: Qwen2.5 / SmolLM)"]
+    DB[("💾 Local SQLite3 Database<br/>(WAL Mode: reality_checkpoint.db)")]
     Memory["🌿 Reality Memory™ Engine<br/>(Episodic Knowledge Graph)"]
 
     Client -->|1. Request Quest (Time, Focus)| API
-    API -->|Fetch Past Observations| Memory
+    API -->|Fetch Past Memories| Memory
     Memory -->|Contextual Memories| DB
     API -->|Prompt + Memories| LLM
     LLM -->|Structured JSON Quest| API
@@ -90,45 +80,44 @@ flowchart TD
     API -->|Return Socratic Follow-up| Client
 ```
 
-### Full-Stack Architecture
-- **Backend**: FastAPI (Python 3.11+), Uvicorn, SQLite3 (WAL mode), Pydantic v2 schemas.
-- **Frontend**: Vite, React 18, Tailwind CSS, Lucide icons, synthesized Web Audio chime synthesizer.
-- **Test Suite**: 37 automated tests passing in Pytest covering safety guardrails, schema validation, and narrative progression.
+- **Frontend (`frontend/`)**: React 18, Tailwind CSS, Lucide icons, synthesized Web Audio chime synthesizer, and Screen WakeLock API.
+- **Backend (`backend/`)**: FastAPI, Pydantic v2 schemas, SQLite3 persistence, and multi-layer safety guardrails.
+- **Test Suite (`backend/test_backend.py`)**: 37 automated tests passing in Pytest verifying schema resilience, safety enforcement, and progression mechanics.
 
 ---
 
-## 5. How I Built It & Open-Source AI at the Core
+## How I Built It
 
-Reality Checkpoint is built natively on top of **Ollama** running open-weight models (`glm-4.7-flash` or open-weight models like Gemma 2 and Llama 3.2). 
+Reality Checkpoint is built natively around **open-weight models served locally through Ollama** (`http://localhost:11434`), supporting models such as `glm-4.7-flash`, `gemma2:2b`, and `llama3.2:3b`.
 
-Unlike decorative chatbots, the open-weight model serves two deterministic system roles:
-1. **The Dynamic Quest Generator**: Injects the player's past Reality Memories, time budget, and storyline progress into a constrained prompt, enforcing strict JSON output for safe, actionable physical directives.
-2. **The Socratic Reflection Evaluator**: Analyzes free-form user reflections, evaluates qualitative mindfulness, extracts structured episodic memories, and invents a contextual Socratic follow-up question.
+Instead of using AI as a decorative chatbot, the model powers two deterministic system roles:
 
-### Zero-Crash Heuristic Fallback
-If Ollama is stopped, cold, or running on low-resource hardware, the backend automatically transitions to an intelligent deterministic heuristic engine. Players are never blocked from completing an outdoor quest due to an unavailable server.
-
----
-
-## 6. Why Does Open Innovation Matter?
-
-1. **Absolute Privacy of Personal Reflections**: Players record intimate, contemplative observations about their physical homes, walking routes, and daily habits. Sending those real-world journals to closed corporate AI APIs would violate the sacredness of personal space. Open-weight models running on local hardware ensure your thoughts never leave your machine.
-2. **Offline-First Resilience**: Nature doesn't have 5G. A game designed to "Touch Grass" must work in remote woods, state parks, basements, or flight mode. Local open-weight models allow the entire experience to operate without internet connectivity.
-3. **No Per-Token Financial Friction**: Gamifying daily habits shouldn't cost the user a metered API fee. Open-source models turn what would be a costly subscription service into an immortal, free utility.
+1. **Dynamic Quest Generation with Schema Enforcement**: Injects the player's past Reality Memories, time constraints, and narrative arc into a structured prompt, enforcing strict Pydantic JSON schemas.
+2. **Qualitative Reflection Evaluation & Socratic Probing**: Reads free-form text reflections, evaluates observational specificity, scores the experience, extracts structured memory nodes, and asks an organic follow-up question.
+3. **Deterministic Heuristic Fallback**: If the local model is cold or running on ultra-constrained environments, the backend automatically fails over to an intelligent rule-based engine. The player is never stranded outside because a model failed to respond.
+4. **Multi-Tier Safety Guardrails (`backend/safety.py`)**: Hardcoded regex and semantic filters enforce that generated quests never advise trespassing, private property access, hazardous terrain, touching unknown plants or animals, approaching strangers, or using phones near active traffic.
 
 ---
 
-## 7. Prize Categories
+## Why Does Open Innovation Matter?
 
-- **Primary Category**: **Hacktoberfest Open-Source AI Challenge: Week 1 ("Touch Grass")**
+1. **Absolute Privacy for Contemplative Reflections**: Personal observations about your neighborhood, daily walks, and quiet thoughts should never be ingested into proprietary training datasets or corporate cloud logs. Running open-weight models locally ensures your private reflections never leave your device.
+2. **True Offline Resilience (Nature Doesn't Have 5G)**: The entire point of "Touch Grass" is going outside. A hiking trail, state park, basement workshop, or remote shoreline often has zero cellular signal. Because the model, runtime, and SQLite database run locally on-device, Reality Checkpoint works completely offline.
+3. **Zero Financial Metering**: Habit-forming outdoor exploration shouldn't incur metered API bills or monthly paywalls. Open-weight innovation makes contemplative technology accessible to anyone with standard hardware.
+
+---
+
+## My Agent Session
+
+The complete architecture, PRD, and test harness were orchestrated and validated using T3 Code and DevRelay agent workflows:
+
+{% agent_session 857d8d69-1694-4ea0-8751-e215c9e90382 %}
+
+---
+
+## Prize Categories
+
+- **Primary Track**: **Hacktoberfest Open-Source AI Challenge: Week 1 ("Touch Grass")**
 - **Partner Categories**:
-  - *Best Use of Gemma / Open-Weight Models* (Runs open-weight models locally via Ollama with structured JSON schemas)
-  - *Best Use of Entire / DevRelay* (Integrated DevRelay developer tooling and automated test harness)
-
----
-
-## 8. Summary
-
-Your next level is not inside another algorithmic feed. It's waiting on the texture of a tree bark, the angle of the afternoon sun, and the sound of the wind through autumn leaves.
-
-Step through the portal. Lock your phone. Go touch grass.
+  - **Best Use of Gemma**: Runs lightweight open-weight models (`gemma:2b` / `gemma2:2b`) locally via Ollama with strict JSON schema outputs and sub-2-second generation latency.
+  - **Best Use of Entire / DevRelay**: Full agent orchestration, automated session documentation, and test-driven verification.

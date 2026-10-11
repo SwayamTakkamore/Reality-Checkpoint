@@ -79,27 +79,24 @@ cd backend && python -m uvicorn main:app --reload --port 8000
 cd frontend && npm install && npm run dev
 ```
 
-### With a local model
+### With local Hugging Face Transformers
 
-Install [Ollama](https://ollama.com) and pull an open-weight model:
+Reality Checkpoint runs open-weight models directly on your device via **Hugging Face Transformers** (default: `Qwen/Qwen2.5-0.5B-Instruct`). No external daemon is required:
 
 ```bash
-ollama pull glm-4.7-flash
-ollama serve
+pip install -r requirements.txt
+./start.sh
 ```
 
-The app detects it automatically and the diagnostic bar switches from `heuristic`
-to `ollama`, with live model name and latency.
+The app loads the model locally into memory, and the diagnostic bar reports `HuggingFace local` with real-time latency.
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
-| `OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama endpoint |
-| `OLLAMA_MODEL` | `glm-4.7-flash:latest` | Model used for generation and evaluation |
-| `OLLAMA_TIMEOUT` | `45` | Per-request timeout in seconds |
-| `REALITY_DISABLE_OLLAMA` | unset | Set to `1` to force heuristic mode |
+| `HF_MODEL_ID` | `Qwen/Qwen2.5-0.5B-Instruct` | Hugging Face model repository ID |
+| `REALITY_DISABLE_HF` | `0` | Set to `1` to disable Transformers |
+| `REALITY_ENABLE_OLLAMA`| `0` | Set to `1` to use Ollama as secondary runtime |
 | `REALITY_DB_PATH` | `backend/reality_checkpoint.db` | SQLite location |
 | `REALITY_HOST` / `REALITY_PORT` | `0.0.0.0` / `8000` | Backend bind address |
-| `REALITY_API` | `http://localhost:8000` | Target of the Vite `/api` proxy |
 
 ---
 
