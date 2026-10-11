@@ -361,6 +361,6 @@ if __name__ == "__main__":
     uvicorn.run(
         "main:app",
         host=os.environ.get("REALITY_HOST", "0.0.0.0"),
-        port=int(os.environ.get("REALITY_PORT", "8000")),
+        port=int(os.environ.get("PORT", os.environ.get("REALITY_PORT", "8000"))),
         reload=os.environ.get("REALITY_RELOAD") == "1",
     )

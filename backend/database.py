@@ -24,7 +24,7 @@ from models import (
     SAFE_BOUNDARY_DEFAULT,
 )
 
-DEFAULT_DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "reality_checkpoint.db")
+DEFAULT_DB_PATH = os.environ.get("REALITY_DB_PATH", os.path.join(os.path.dirname(os.path.abspath(__file__)), "reality_checkpoint.db"))
 
 DEFAULT_PLAYER_ID = "local-player"
 

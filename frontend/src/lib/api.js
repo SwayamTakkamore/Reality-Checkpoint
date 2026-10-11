@@ -2,7 +2,13 @@
 // Every call fails soft: the UI must never crash because the local model
 // is cold, slow, or stopped.
 
-const BASE = '/api'
+const getApiBase = () => {
+  const envUrl = import.meta.env.VITE_API_URL || ""
+  if (!envUrl) return "/api"
+  const trimmed = envUrl.replace(/\/+$/, "")
+  return trimmed.endsWith("/api") ? trimmed : `${trimmed}/api`
+}
+const BASE = getApiBase()
 
 export class ApiError extends Error {
   constructor(message, status, payload) {
